@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
         } else {
             val intent = Intent(this, ProfileActivity::class.java).apply {
                 putExtra("person", persons.first())
-                savePerson(persons.first());
+                savePerson(persons.first())
             }
             startActivity(intent)
         }

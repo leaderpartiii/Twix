@@ -27,6 +27,10 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
+import android.app.AlertDialog
+import androidx.compose.runtime.saveable.rememberSaveable
+
+
 class AuthActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +44,19 @@ class AuthActivity : ComponentActivity() {
     }
 }
 
+fun alertForBlankField(context: Context) {
+
+    val builder = AlertDialog.Builder(context)
+    builder.setTitle("Предупреждение")
+    builder.setMessage("Fields doesn't be blank")
+    builder.setPositiveButton("ОК") { dialog, _ ->
+        dialog.dismiss()
+    }
+    val dialog = builder.create()
+    dialog.show()
+
+}
+
 fun goToProfile(
     context: Context,
     nicknameInput: String,
@@ -47,6 +64,7 @@ fun goToProfile(
     passwordInput: String,
     descriptionInput: String
 ) {
+
     val myDate: Date = Calendar.getInstance().time
     val formatterMonthYear = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
     val formattedMonthYear = formatterMonthYear.format(myDate)
@@ -74,14 +92,14 @@ fun goToProfile(
 fun AuthScreen() {
     val context = LocalContext.current
 
-    var login by remember { mutableStateOf("") }
-    var nickname by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
+    var login by rememberSaveable { mutableStateOf("") }
+    var nickname by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+    var description by rememberSaveable { mutableStateOf("") }
 
     Box(
         modifier = Modifier
-            .padding(top = 338.dp)
+            .padding(top = 256.dp)
             .fillMaxSize()
     ) {
         Column(
@@ -116,7 +134,12 @@ fun AuthScreen() {
                 label = { Text("Description") },
                 modifier = Modifier.fillMaxWidth()
             )
-            Button(onClick = { goToProfile(context, nickname, login, password, description) }) {
+            Button(onClick = {
+                if (nickname.isBlank() || login.isBlank() || password.isBlank()) {
+                    alertForBlankField(context)
+                } else
+                    goToProfile(context, nickname, login, password, description)
+            }) {
                 Text(text = "Confirm")
             }
         }

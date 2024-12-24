@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.twix.db.PersonEntity
 import com.example.twix.db.PersonRepository
+import com.example.twix.firebabasedb.savePerson
 import com.example.twix.ui.theme.TwixTheme
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -64,6 +65,7 @@ fun goToProfile(
 
     val repository = PersonRepository(context)
     repository.addPerson(newPerson)
+    savePerson(newPerson)
 
     context.startActivity(intent)
 }

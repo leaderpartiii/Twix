@@ -45,8 +45,10 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import com.example.twix.db.PersonEntity
 import com.example.twix.db.Post
+import com.example.twix.db.PersonRepository
 
 @Composable
 fun ProfileBox(nickname: String, login: String, dateRegister: String, description: String) {
@@ -153,6 +155,8 @@ fun PostList(nickname: String, login: String, posts: List<Post>) {
 fun PostItem(post: Post, nickname: String, login: String) {
     var likes by remember { mutableIntStateOf(post.likes) }
     var retweets by remember { mutableIntStateOf(post.retweets) }
+    val person = PersonRepository(LocalContext.current)
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -189,7 +193,7 @@ fun PostItem(post: Post, nickname: String, login: String) {
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
-        IconButton(onClick = { likes++;post.likes++ }) {
+        IconButton(onClick = { likes++;person.incrementLikes(nickname, post) }) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -201,7 +205,7 @@ fun PostItem(post: Post, nickname: String, login: String) {
                 Text(text = likes.toString())
             }
         }
-        IconButton(onClick = { retweets++; post.retweets++ }) {
+        IconButton(onClick = { retweets++; person.incrementRetweets(nickname, post) }) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),

@@ -13,6 +13,9 @@ interface CommandsDao {
     @Query("UPDATE persons SET posts = :updatedPosts WHERE nick = :nickname")
     fun updatePosts(nickname: String, updatedPosts: MutableList<Post>)
 
+    /*@Query("UPDATE persons SET posts = :updatedPosts,  = :likes WHERE nick = :nickname")
+    fun updatePostsLikes(nickname: String, updatedPosts: MutableList<Post>, likes: Int)*/
+
     @Query("SELECT * FROM persons WHERE nick = :nickname")
     fun getPerson(nickname: String): PersonEntity
 

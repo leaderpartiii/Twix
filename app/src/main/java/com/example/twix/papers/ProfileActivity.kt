@@ -46,7 +46,7 @@ class ProfileActivity : ComponentActivity() {
 private fun MainScreen(
     personEntity: PersonEntity? = null
 ) {
-    val context = LocalContext.current;
+    val context = LocalContext.current
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) }
@@ -76,7 +76,7 @@ private fun MainScreen(
                     onBack = { navController.popBackStack() }
                 )
             }
-            composable("showMessage/text") { backStackEntry ->
+            composable("showMessage/{text}") { backStackEntry ->
                 val text = backStackEntry.arguments?.getString("text") ?: "Default Text"
                 Log.d("Debug", text)
                 CreateShowMessageScreen(text = text)

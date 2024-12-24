@@ -44,11 +44,11 @@ class AuthActivity : ComponentActivity() {
     }
 }
 
-fun alertForBlankField(context: Context) {
+fun alertForBlankField(context: Context, message: String) {
 
     val builder = AlertDialog.Builder(context)
     builder.setTitle("Предупреждение")
-    builder.setMessage("Fields doesn't be blank")
+    builder.setMessage(message)
     builder.setPositiveButton("ОК") { dialog, _ ->
         dialog.dismiss()
     }
@@ -136,7 +136,7 @@ fun AuthScreen() {
             )
             Button(onClick = {
                 if (nickname.isBlank() || login.isBlank() || password.isBlank()) {
-                    alertForBlankField(context)
+                    alertForBlankField(context, "Fields doesn't be blank")
                 } else
                     goToProfile(context, nickname, login, password, description)
             }) {

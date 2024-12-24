@@ -8,8 +8,8 @@ import java.util.Locale
 
 @Parcelize
 data class Post(
-    val content: String,
-    val createdAt: String,
+    val content: String = "",
+    val createdAt: String = "",
     var likes: Int = 0,
     var retweets: Int = 0
 ) : Parcelable {

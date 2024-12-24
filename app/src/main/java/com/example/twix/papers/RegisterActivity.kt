@@ -86,7 +86,7 @@ fun CenterTittle() {
 
 @Composable
 fun ButtonsReg() {
-    val context = LocalContext.current;
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -155,6 +155,21 @@ fun ButtonsReg() {
                             .size(24.dp)
                             .clip(CircleShape)
                     )
+                }
+            }
+
+            Button(onClick = {
+                context.startActivity(Intent(context, PreGuestActivity::class.java))
+            }) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .width(300.dp)
+                        .border(BorderStroke(1.dp, SolidColor(Color.Black)))
+                        .padding(top = 12.dp, bottom = 12.dp, start = 30.dp, end = 30.dp),
+                ) {
+                    Text(text = "I have account   ", fontSize = 16.sp)
                 }
             }
         }

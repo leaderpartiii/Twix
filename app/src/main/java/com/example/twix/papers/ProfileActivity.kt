@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -16,25 +17,20 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.twix.db.PersonEntity
-import java.text.SimpleDateFormat
 
 import com.example.twix.db.PersonRepository
 import com.example.twix.db.Post
 import com.example.twix.feed.CreatePostScreen
 import com.example.twix.feed.FeedScreen
-import com.example.twix.feed.PostScreen
-import com.example.twix.feed.PostViewModel
 import com.example.twix.profile.ProfileScreen
 import com.example.twix.ui.theme.TwixTheme
-import kotlinx.coroutines.CoroutineScope
-import java.util.Calendar
-import java.util.Locale
 
 class ProfileActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +60,8 @@ private fun MainScreen(
             composable("profile") {
                 ProfileScreen(
                     personEntity = personEntity,
-                    onCreatePostClick = { navController.navigate("createPost") }
+                    onCreatePostClick = { navController.navigate("createPost") },
+                    onWatchMessage = { navController.navigate("showMessage/$it") }
                 )
             }
             composable("createPost") {
@@ -79,7 +76,24 @@ private fun MainScreen(
                     onBack = { navController.popBackStack() }
                 )
             }
+            composable("showMessage/text") { backStackEntry ->
+                val text = backStackEntry.arguments?.getString("text") ?: "Default Text"
+                Log.d("Debug", text)
+                CreateShowMessageScreen(text = text)
+            }
         }
+    }
+}
+
+@Composable
+fun CreateShowMessageScreen(text: String) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text = text, fontSize = 40.sp)
     }
 }
 

@@ -9,10 +9,10 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = "persons")
 data class PersonEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val nick: String,
-    val login: String,
-    val password: String,
-    val dateRegister: String,
-    val description: String,
-    val posts: MutableList<Post>
+    val nick: String = "",
+    val login: String = "",
+    val password: String = "",
+    val dateRegister: String = "",
+    val description: String = "",
+    val posts: MutableList<Post> = mutableListOf()
 ) : Parcelable

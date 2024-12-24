@@ -1,6 +1,7 @@
 package com.example.twix.firebabasedb
 
 
+import android.util.Log
 import com.example.twix.db.PersonEntity
 import com.example.twix.db.Post
 import com.google.firebase.firestore.FieldValue
@@ -28,7 +29,6 @@ fun savePerson(person: PersonEntity) {
 
     db.collection("persons").document(person.nick)
         .set(personMap)
-
 }
 
 fun updatePerson(person: PersonEntity) {
@@ -75,4 +75,47 @@ fun updatePersonPosts(nickname: String, posts: MutableList<Post>) {
         .set(personMap, SetOptions.merge())
 }
 
+fun getAllUsersFromFirebase(onSuccess: (List<PersonEntity>) -> Unit, onFailure: () -> Unit) {
+    val db = FirebaseFirestore.getInstance()
+    db.collection("persons")
+        .get()
+        .addOnSuccessListener { documents ->
+            val users = documents.mapNotNull { document ->
+                document.toObject(PersonEntity::class.java)
+            }
+            onSuccess(users)
+        }
+        .addOnFailureListener {
+            onFailure()
+        }
+}
 
+fun getPersonByNickname(
+    nickname: String,
+    onSuccess: (PersonEntity?) -> Unit,
+    onFailure: () -> Unit
+) {
+    val db = FirebaseFirestore.getInstance()
+    if (nickname.isBlank()) {
+        onFailure()
+        return
+    }
+    db.collection("persons")
+        .document(nickname)
+        .get()
+        .addOnSuccessListener { document ->
+            if (document.exists()) {
+                val person = document.toObject(PersonEntity::class.java)
+                if (person != null) {
+                    Log.d("Debug", person.nick)
+                    Log.d("Debug", person.password)
+                }
+                onSuccess(person)
+            } else {
+                onSuccess(null)
+            }
+        }
+        .addOnFailureListener {
+            onFailure()
+        }
+}

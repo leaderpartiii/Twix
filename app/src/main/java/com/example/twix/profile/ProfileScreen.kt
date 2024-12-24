@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,10 +34,17 @@ import com.example.twix.ui.theme.TwixTheme
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material3.Button
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.example.twix.db.PersonEntity
 import com.example.twix.db.Post
 
@@ -92,7 +100,7 @@ fun ProfileScreen(
                 onClick = { onCreatePostClick() },
                 contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
-                Text("+")
+                Image(painterResource(R.drawable.add_text_icon), contentDescription = null);
             }
         },
         floatingActionButtonPosition = FabPosition.End,
@@ -134,7 +142,7 @@ fun ProfileScreen(
 @Composable
 fun PostList(nickname: String, login: String, posts: List<Post>) {
     LazyColumn {
-        items(posts) { post ->
+        items(posts.reversed()) { post ->
             PostItem(post = post, nickname, login)
             Divider(color = Color.LightGray, thickness = 1.dp)
         }
@@ -143,24 +151,26 @@ fun PostList(nickname: String, login: String, posts: List<Post>) {
 
 @Composable
 fun PostItem(post: Post, nickname: String, login: String) {
+    var likes by remember { mutableIntStateOf(post.likes) }
+    var retweets by remember { mutableIntStateOf(post.retweets) }
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxWidth()
     ) {
-        Box {
+        Box(modifier = Modifier.fillMaxHeight(), contentAlignment = Alignment.CenterStart) {
             Image(
                 painter = painterResource(id = R.drawable.cat4_icon),
                 contentDescription = null,
                 modifier = Modifier
                     .size(56.dp)
-                    .padding(top = 12.dp, start = 12.dp)
+                    .padding(start = 8.dp, top = 8.dp)
                     .clip(RoundedCornerShape(100))
             )
-
         }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp, start = (56 + 12).dp),
+                .padding(top = 12.dp, start = (56 + 12).dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Row(
@@ -173,7 +183,36 @@ fun PostItem(post: Post, nickname: String, login: String) {
             }
             Text(text = post.content, fontSize = 12.sp, color = Color.Black)
         }
-
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+    ) {
+        IconButton(onClick = { likes++;post.likes++ }) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.heart_stroke_icon),
+                    contentDescription = null
+                )
+                Text(text = likes.toString())
+            }
+        }
+        IconButton(onClick = { retweets++; post.retweets++ }) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.retweet_stroke_icon),
+                    contentDescription = null
+                )
+                Text(text = retweets.toString())
+            }
+        }
     }
 }
 

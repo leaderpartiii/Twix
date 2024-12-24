@@ -10,8 +10,8 @@ import java.util.Locale
 data class Post(
     val content: String,
     val createdAt: String,
-    val likes: Int = 0,
-    val retweets: Int = 0
+    var likes: Int = 0,
+    var retweets: Int = 0
 ) : Parcelable {
     constructor(content: String) : this(
         content = content,

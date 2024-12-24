@@ -24,11 +24,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AuthActivity"
+            android:name=".papers.AuthActivity"
             android:exported="true"
             android:theme="@style/Theme.Twix" />
         <activity
-            android:name=".ProfileActivity"
+            android:name=".papers.ProfileActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Twix" />
+        <activity
+            android:name=".papers.RegisterActivity"
             android:exported="true"
             android:theme="@style/Theme.Twix" />
     </application>

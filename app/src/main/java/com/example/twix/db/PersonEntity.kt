@@ -14,5 +14,6 @@ data class PersonEntity(
     val password: String = "",
     val dateRegister: String = "",
     val description: String = "",
+    val avatar: Int = 0,
     val posts: MutableList<Post> = mutableListOf()
 ) : Parcelable

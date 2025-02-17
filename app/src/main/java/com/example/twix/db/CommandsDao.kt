@@ -19,8 +19,12 @@ interface CommandsDao {
     @Query("SELECT * FROM persons WHERE nick = :nickname")
     fun getPerson(nickname: String): PersonEntity
 
+    @Query("SELECT * FROM persons WHERE nick = :nickname")
+    fun getPersonPostById(nickname: String): PersonEntity
+
     @Query("SELECT * FROM persons")
     fun getAllPersons(): List<PersonEntity>
+
 
     @Query("DELETE FROM persons")
     fun clearPerson(): Int

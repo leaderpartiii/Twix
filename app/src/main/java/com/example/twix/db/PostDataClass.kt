@@ -2,6 +2,7 @@ package com.example.twix.db
 
 import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
+import androidx.room.PrimaryKey
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -11,13 +12,14 @@ data class Post(
     val content: String = "",
     val createdAt: String = "",
     var likes: Int = 0,
-    var retweets: Int = 0
+    var retweets: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
 ) : Parcelable {
     constructor(content: String) : this(
         content = content,
         createdAt = getCurrentDate(),
         likes = 0,
-        retweets = 0
+        retweets = 0,
     )
 
     companion object {

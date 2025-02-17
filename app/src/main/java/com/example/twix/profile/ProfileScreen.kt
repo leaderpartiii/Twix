@@ -45,8 +45,16 @@ import com.example.twix.db.PersonEntity
 import com.example.twix.db.Post
 import com.example.twix.db.PersonRepository
 
+private val TEMP_AVATAR = R.drawable.cat4_icon
+
 @Composable
-fun ProfileBox(nickname: String, login: String, dateRegister: String, description: String) {
+fun ProfileBox(
+    nickname: String,
+    login: String,
+    dateRegister: String,
+    avatar: Int,
+    description: String
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -55,7 +63,7 @@ fun ProfileBox(nickname: String, login: String, dateRegister: String, descriptio
     ) {
         Box {
             Image(
-                painter = painterResource(id = R.drawable.cat4_icon),
+                painter = painterResource(id = avatar),
                 contentDescription = null,
                 modifier = Modifier
                     .size(80.dp)
@@ -91,7 +99,7 @@ fun ProfileScreen(
         Post("Another cool post "),
         Post("Loving Twix!")
     )
-
+    val avatar: Int = personEntity?.avatar ?: TEMP_AVATAR
 
     Scaffold(
         floatingActionButton = {
@@ -131,9 +139,9 @@ fun ProfileScreen(
                     .background(Color(0xFFF5F5F5))
                     .shadow(4.dp),
             ) {
-                ProfileBox(nickname, login, dateRegister, description)
+                ProfileBox(nickname, login, dateRegister, avatar, description)
             }
-            PostList(nickname, login, posts, onWatchMessage)
+            PostList(nickname, login, avatar, posts, onWatchMessage)
         }
     }
 }
@@ -142,19 +150,26 @@ fun ProfileScreen(
 fun PostList(
     nickname: String,
     login: String,
+    avatar: Int,
     posts: List<Post>,
     onWatchMessage: (post: String) -> Unit
 ) {
     LazyColumn {
         items(posts.reversed()) { post ->
-            PostItem(post = post, nickname, login, onWatchMessage)
+            PostItem(post = post, nickname, login, avatar, onWatchMessage)
             Divider(color = Color.LightGray, thickness = 1.dp)
         }
     }
 }
 
 @Composable
-fun PostItem(post: Post, nickname: String, login: String, onWatchMessage: (post: String) -> Unit) {
+fun PostItem(
+    post: Post,
+    nickname: String,
+    login: String,
+    avatar: Int,
+    onWatchMessage: (post: String) -> Unit
+) {
     var likes by remember { mutableIntStateOf(post.likes) }
     var retweets by remember { mutableIntStateOf(post.retweets) }
     val person = PersonRepository(LocalContext.current)
@@ -166,7 +181,7 @@ fun PostItem(post: Post, nickname: String, login: String, onWatchMessage: (post:
     ) {
         Box(modifier = Modifier.fillMaxHeight(), contentAlignment = Alignment.CenterStart) {
             Image(
-                painter = painterResource(id = R.drawable.cat4_icon),
+                painter = painterResource(id = avatar),
                 contentDescription = null,
                 modifier = Modifier
                     .size(56.dp)

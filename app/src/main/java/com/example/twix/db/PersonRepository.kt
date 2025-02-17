@@ -7,7 +7,7 @@ import com.example.twix.firebabasedb.updatePersonPosts
 class PersonRepository(context: Context) {
     private val personDao = AppDatabase.getDatabase(context).commandsDao()
 
-    enum class Ops { incLikes, decLikes, incTweets, decTweets }
+    enum class Ops { INC_LIKES, DEC_LIKES, INC_TWEETS, DEC_TWEETS }
 
     fun addPerson(person: PersonEntity) {
         personDao.insertPerson(person)
@@ -38,10 +38,10 @@ class PersonRepository(context: Context) {
         val updatedPosts = person.posts.map { post ->
             if (post.content == targetPost.content && post.createdAt == targetPost.createdAt) {
                 when (ops) {
-                    Ops.incLikes -> post.copy(likes = post.likes + 1)
-                    Ops.decLikes -> post.copy(likes = post.likes - 1)
-                    Ops.incTweets -> post.copy(retweets = post.retweets + 1)
-                    Ops.decTweets -> post.copy(retweets = post.retweets - 1)
+                    Ops.INC_LIKES -> post.copy(likes = post.likes + 1)
+                    Ops.DEC_LIKES -> post.copy(likes = post.likes - 1)
+                    Ops.INC_TWEETS -> post.copy(retweets = post.retweets + 1)
+                    Ops.DEC_TWEETS -> post.copy(retweets = post.retweets - 1)
                 }
 
             } else {
@@ -53,17 +53,17 @@ class PersonRepository(context: Context) {
     }
 
     fun incrementLikes(nickname: String, targetPost: Post) =
-        updatePostStatus(nickname, targetPost, Ops.incLikes)
+        updatePostStatus(nickname, targetPost, Ops.INC_LIKES)
 
 
     fun decrementLikes(nickname: String, targetPost: Post) =
-        updatePostStatus(nickname, targetPost, Ops.decLikes)
+        updatePostStatus(nickname, targetPost, Ops.DEC_LIKES)
 
     fun incrementRetweets(nickname: String, targetPost: Post) =
-        updatePostStatus(nickname, targetPost, Ops.incTweets)
+        updatePostStatus(nickname, targetPost, Ops.INC_TWEETS)
 
 
     fun decrementRetweets(nickname: String, targetPost: Post) =
-        updatePostStatus(nickname, targetPost, Ops.decTweets)
+        updatePostStatus(nickname, targetPost, Ops.DEC_TWEETS)
 
 }

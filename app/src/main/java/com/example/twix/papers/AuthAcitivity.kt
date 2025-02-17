@@ -28,9 +28,10 @@ import java.util.Date
 import java.util.Locale
 
 import android.app.AlertDialog
+import android.util.Log
 import androidx.compose.runtime.saveable.rememberSaveable
 
-
+private const val AMOUNT_OF_RANDOM = 8
 class AuthActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +46,6 @@ class AuthActivity : ComponentActivity() {
 }
 
 fun alertForBlankField(context: Context, message: String) {
-
     val builder = AlertDialog.Builder(context)
     builder.setTitle("Предупреждение")
     builder.setMessage(message)
@@ -54,7 +54,19 @@ fun alertForBlankField(context: Context, message: String) {
     }
     val dialog = builder.create()
     dialog.show()
+}
 
+private fun getDrawableIdByName(context: Context, name: String): Int {
+    return context.resources.getIdentifier(name, "drawable", context.packageName)
+}
+
+private fun getRandomAvatar(context: Context): Int {
+    val nameAvatar: String = "cat" + (1..AMOUNT_OF_RANDOM).random() + "_icon"
+    val id =  getDrawableIdByName(context, nameAvatar)
+    if (id == 0) {
+        Log.e("getDrawableIdByName", "Drawable not found for name: $nameAvatar")
+    }
+    return id
 }
 
 fun goToProfile(
@@ -68,13 +80,14 @@ fun goToProfile(
     val myDate: Date = Calendar.getInstance().time
     val formatterMonthYear = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
     val formattedMonthYear = formatterMonthYear.format(myDate)
-
+    val avatar = getRandomAvatar(context)
     val newPerson = PersonEntity(
         nick = nicknameInput,
         login = loginInput,
         password = passwordInput,
         dateRegister = formattedMonthYear,
         description = descriptionInput,
+        avatar = avatar,
         posts = ArrayList()
     )
     val intent = Intent(context, ProfileActivity::class.java).apply {
